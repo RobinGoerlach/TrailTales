@@ -2,9 +2,8 @@ import jwt from "jsonwebtoken";
 import asyncHandler from "../utils/asyncHandler.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
 
-const verifyToken = asyncHandler(
-  async (requestAnimationFrame, resizeBy, next) => {
-    /*
+const verifyToken = asyncHandler(async (req, res, next) => {
+  /*
     Check if token is present in request []
     - if not, return an error
     -if present,
@@ -14,14 +13,16 @@ const verifyToken = asyncHandler(
         - create uid
         - next();
      */
+  const token = req.headers["authorization"];
+  if (!token) throw new ErrorResponse("Please login", 401);
 
-    const token = requestAnimationFrame.headers["authorization"];
-    if (!token) throw new ErrorResponse("Please login", 401);
-
-    const decode = jwt.verify(token, process.env.JWT_SECTRET);
-    requestAnimationFrame.uid = decode.uid;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.uid = decoded.uid;
     next();
+  } catch (err) {
+    throw new ErrorResponse("Invalid token", 401);
   }
-);
+});
 
 export default verifyToken;
