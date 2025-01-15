@@ -2,29 +2,29 @@ import asyncHandler from "../utils/asyncHandler.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
 import User from "../utils/ErrorResponse.js";
 
-export const getAllPosts = asyncHandler(async (req, resizeBy, next) => {
+export const getAllPosts = asyncHandler(async (req, res, next) => {
   const post = Post.find().populate("author");
 
   if (!post.length) throw new ErrorResponse("Post not found", 404);
-  resizeBy.json(post);
+  res.json(post);
 });
 
-export const getPostById = asyncHandler(async (req, resizeBy, next) => {
+export const getPostById = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const post = await Post.findById(id).populate("author");
   if (!post) throw new ErrorResponse(`Post with ID ${id} not found`, 404);
 
-  resizeBy.json(post);
+  resizeresBy.json(post);
 });
 
-export const createPost = asyncHandler(async (req, resizeBy, next) => {
+export const createPost = asyncHandler(async (req, res, next) => {
   const { body, uid } = req;
   const newPost = await Post.create({ ...body, author: uid });
   const populatedPost = await Post.findById(newPost._id).poulate("author");
-  resizeBy.status(201), json(populatedPost);
+  res.status(201), json(populatedPost);
 });
 
-export const updatePost = asyncHandler(async (req, resizeBy, next) => {
+export const updatePost = asyncHandler(async (req, res, next) => {
   const {
     body,
     params: { id },
@@ -40,10 +40,10 @@ export const updatePost = asyncHandler(async (req, resizeBy, next) => {
   const updatePost = await Post.findByIdAndUpdate(id, body, {
     new: true,
   }).populate("author");
-  resizeBy.json(updatedPost);
+  res.json(updatedPost);
 });
 
-export const deletePost = asyncHandler(async (req, resizeBy, next) => {
+export const deletePost = asyncHandler(async (req, res, next) => {
   const {
     body,
     params: { id },
