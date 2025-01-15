@@ -1,5 +1,8 @@
 // File: index.js
 
+//
+import { setupSwagger } from "./swaggerConfig.js";
+
 // Import the Express framework for building web applications
 import express from "express";
 
@@ -29,6 +32,9 @@ app.use(cors());
 
 // Use the Express JSON parser to handle JSON payloads in incoming requests
 app.use(express.json());
+
+// Setup Swagger UI
+setupSwagger(app);
 
 // Mount the authentication router at the "/auth" path
 // All routes in authRouter will be prefixed with "/auth"
